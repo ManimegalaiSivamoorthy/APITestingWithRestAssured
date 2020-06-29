@@ -9,11 +9,15 @@ import cucumber.api.java.en.When;
 import io.restassured.internal.path.json.JSONAssertion;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseOptions;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import utils.RestAssuredExtension;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,8 +64,15 @@ public class MyStepdefs {
 
     @Then("Should get a simple json as response")
     public void shouldGetASimpleJsonAsResponse() throws JSONException {
-
-        JSONAssert.assertEquals(EXPECTED_RESULT_FOR_JSON_EP, response.getBody().asString(),true);
+        String expectedJson = "";
+        try {
+            FileInputStream fileInputStream = new FileInputStream("src/test/resources/TestJson/getEndpoint.json");
+            expectedJson = IOUtils.toString(fileInputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       // JSONAssert.assertEquals(EXPECTED_RESULT_FOR_JSON_EP, response.getBody().asString(),true);
+        JSONAssert.assertEquals(expectedJson, response.getBody().asString(),true);
     }
 
 }
