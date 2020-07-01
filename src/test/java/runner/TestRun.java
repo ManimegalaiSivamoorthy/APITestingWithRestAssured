@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions
         (
-                features = "src/test/java/feature/getOperation.feature",
+                features = "src/test/java/feature/postOperation.feature",
                 glue = "steps",
                 dryRun = false,
                 monochrome = true,

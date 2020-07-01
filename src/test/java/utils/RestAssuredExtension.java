@@ -9,6 +9,7 @@ import io.restassured.specification.RequestSpecification;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RestAssuredExtension {
@@ -34,5 +35,10 @@ public class RestAssuredExtension {
     public ResponseOptions<Response> getOpsWithQueryParameter(String url, Map<String, String> queryParam) {
         Request.queryParams(queryParam);
         return Request.get(url);
+    }
+
+    public ResponseOptions<Response> postOpsWithBody(String url, HashMap<String, String> requestBody) {
+        Request.body(requestBody);
+        return Request.post(url);
     }
 }

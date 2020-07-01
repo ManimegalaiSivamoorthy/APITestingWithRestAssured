@@ -1,12 +1,13 @@
 package steps;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import constants.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.restassured.internal.path.json.JSONAssertion;
+import cucumber.api.java.it.Ma;
+import io.cucumber.datatable.DataTable;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseOptions;
 import org.apache.commons.io.IOUtils;
@@ -19,9 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static constants.TestConstants.EXPECTED_RESULT_FOR_JSON_EP;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -30,6 +31,8 @@ public class MyStepdefs {
     public static ResponseOptions<Response> response;
 
     ObjectMapper objectMapper = new ObjectMapper();
+
+    HashMap<String, String> requestBody = new HashMap<>();
 
     RestAssuredExtension restAssuredExtension = new RestAssuredExtension();
 
@@ -75,4 +78,28 @@ public class MyStepdefs {
         JSONAssert.assertEquals(expectedJson, response.getBody().asString(),true);
     }
 
+    @Given("The request body for the POST operation")
+    public void theRequestBodyForThePOSTOperation(DataTable table) {
+        List<Map<String, String>> data = table.asMaps(String.class, String.class);
+        requestBody.put("name", data.get(0).get("name"));
+        requestBody.put("age", data.get(0).get("age"));
+        requestBody.put("profession", data.get(0).get("profession"));
+    }
+
+    @When("Perform the Post operation with {string}")
+    public void performThePostOperationWith(String url) {
+        response = restAssuredExtension.postOpsWithBody(url, requestBody);
+    }
+
+    @Then("The response body should have key {string} and value {string}")
+    public void theResponseBodyShouldHaveKeyAndValue(String key, String value) throws IOException {
+        String responseBody = response.getBody().asString();
+        model.Response postResponse = objectMapper.readValue(responseBody, model.Response.class);
+        assertThat(postResponse.getJson().get(key), equalTo(value));
+    }
+
+    @Given("The request body for the POST operation from a file path {string}")
+    public void theRequestBodyForThePOSTOperationFromAFilePath(String arg0) {
+
+    }
 }
