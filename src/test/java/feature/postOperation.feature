@@ -8,5 +8,6 @@ Feature: Verify the POST operation
 
   Scenario: Verifying the POST operation by passing json from a file
     Given The request body for the POST operation from a file path "src/test/resources/TestJson/postEndpoint.json"
-    When Perform the Post operation with "/anything"
+    When Perform the Post operation with "/anything" for json read from a file
     Then The response body should have key "name" and value "ben"
+
