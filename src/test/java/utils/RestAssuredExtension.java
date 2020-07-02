@@ -41,4 +41,9 @@ public class RestAssuredExtension {
         Request.body(requestBody);
         return Request.post(url);
     }
+
+    public ResponseOptions<Response> postOpsJsonFromFile(String url, String jsonBody) {
+        Request.body(jsonBody);
+        return Request.post(url);
+    }
 }

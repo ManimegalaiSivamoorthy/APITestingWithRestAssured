@@ -1,12 +1,10 @@
 package steps;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.api.java.it.Ma;
 import io.cucumber.datatable.DataTable;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseOptions;
@@ -16,7 +14,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import utils.RestAssuredExtension;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -33,6 +30,8 @@ public class MyStepdefs {
     ObjectMapper objectMapper = new ObjectMapper();
 
     HashMap<String, String> requestBody = new HashMap<>();
+
+    String jsonBody = "";
 
     RestAssuredExtension restAssuredExtension = new RestAssuredExtension();
 
@@ -83,7 +82,7 @@ public class MyStepdefs {
         List<Map<String, String>> data = table.asMaps(String.class, String.class);
         requestBody.put("name", data.get(0).get("name"));
         requestBody.put("age", data.get(0).get("age"));
-        requestBody.put("profession", data.get(0).get("profession"));
+        requestBody.put("character", data.get(0).get("character"));
     }
 
     @When("Perform the Post operation with {string}")
@@ -99,7 +98,17 @@ public class MyStepdefs {
     }
 
     @Given("The request body for the POST operation from a file path {string}")
-    public void theRequestBodyForThePOSTOperationFromAFilePath(String arg0) {
+    public void theRequestBodyForThePOSTOperationFromAFilePath(String filePath) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            jsonBody = IOUtils.toString(fileInputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @When("Perform the Post operation with {string} for json read from a file")
+    public void performThePostOperationWithForJsonReadFromAFile(String url) {
+        response = restAssuredExtension.postOpsJsonFromFile(url,jsonBody);
     }
 }
