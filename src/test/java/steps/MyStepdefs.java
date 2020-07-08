@@ -68,7 +68,7 @@ public class MyStepdefs {
     public void shouldGetASimpleJsonAsResponse() throws JSONException {
         String expectedJson = "";
         try {
-            FileInputStream fileInputStream = new FileInputStream("src/test/resources/TestJson/getEndpoint.json");
+            FileInputStream fileInputStream = new FileInputStream("src/test/resources/TestJson/getEndpoint.txt");
             expectedJson = IOUtils.toString(fileInputStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
