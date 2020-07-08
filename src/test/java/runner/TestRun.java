@@ -12,7 +12,8 @@ import org.junit.runner.RunWith;
                 glue = "steps",
                 dryRun = false,
                 monochrome = true,
-                plugin = {"pretty", "html: test-output", "json:target/cucumber.json"}
+                plugin = {"pretty:target/cucumber-pretty.txt", "html:target/cucumber-html-report", "json:target/cucumber.json",
+                        "junit:target/cucumber-results.xml"}
         )
 public class TestRun {
 }
